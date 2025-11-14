@@ -20,8 +20,4 @@ public class CambioEstadoController {
         return ResponseEntity.ok(service.getAllCambios());
     }
 
-    @PostMapping
-    public ResponseEntity<Integer> create(@Valid @RequestBody CambioEstadoRequest request) {
-        return ResponseEntity.ok(service.createCambioEstado(request));
-    }
 }
