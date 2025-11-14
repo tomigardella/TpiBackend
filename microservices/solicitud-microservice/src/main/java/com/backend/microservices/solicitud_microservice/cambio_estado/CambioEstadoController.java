@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -16,8 +15,13 @@ public class CambioEstadoController {
     private final CambioEstadoService service;
 
     @GetMapping
-    public ResponseEntity<List<CambioEstadoResponse>> getAll() {
+    public ResponseEntity<List<CambioEstadoResponse>> getAllCambios() {
         return ResponseEntity.ok(service.getAllCambios());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CambioEstadoResponse> getCambioById(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
 }
