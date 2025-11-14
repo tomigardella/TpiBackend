@@ -7,7 +7,6 @@ public class TarifaMapper {
 
     public Tarifa toTarifa(TarifaRequest request) {
         return Tarifa.builder()
-                .tarifaId(request.tarifaId())
                 .rangoPesoMinKg(request.rangoPesoMinKg())
                 .rangoPesoMaxKg(request.rangoPesoMaxKg())
                 .rangoVolMinM3(request.rangoVolMinM3())

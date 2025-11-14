@@ -26,35 +26,44 @@ public class SolicitudController {
 
     private final SolicitudService service;
 
+
+    // GET SOLICITUDES
     @GetMapping()
     public ResponseEntity<List<SolicitudResponse>> getAllSolicitudes() {
         return ResponseEntity.ok(service.getAllSolicitudes());
     }
 
+    // POST SOLICITUD
     @PostMapping()
     public ResponseEntity<Integer> createSolicitud(@Valid @RequestBody SolicitudRequest request) {
         return ResponseEntity.ok(service.createSolicitud(request));
     }
 
+    // DELETE SOLICITUD
     @DeleteMapping("/{solicitudId}")
     public ResponseEntity<Void> deleteSolicitud(@PathVariable("solicitudId") Integer id) throws Exception {
         
         service.deleteSolicitud(id);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> updateSolicitud(@Valid @RequestBody SolicitudRequest request) {
+    // ACTUALIZAR SOLICITUD
+    @PutMapping("/{solicitudId}")
+    public ResponseEntity<Void> updateSolicitud(
+            @PathVariable Integer solicitudId,
+            @Valid @RequestBody SolicitudRequest request) {
 
-        service.updateSolicitud(request);
+        service.updateSolicitud(solicitudId, request);
         return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/{solicitudId}")
-    public ResponseEntity<SolicitudResponse> getSolicitudById(@PathVariable("solicitudId") Integer id) {
-        return ResponseEntity.ok(service.getSolicitudById(id));
+    public ResponseEntity<SolicitudResponse> getSolicitudById(@PathVariable("solicitudId") Integer solicitudId) {
+        return ResponseEntity.ok(service.getSolicitudById(solicitudId));
     }
 
+
+    // Actualizo el estado actual de la solicitud
     @PutMapping("/{solicitudId}/estado")
     public ResponseEntity<Void> cambiarEstado(
             @PathVariable("solicitudId") Integer solicitudId,

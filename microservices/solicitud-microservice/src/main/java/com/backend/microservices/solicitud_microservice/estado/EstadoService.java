@@ -38,14 +38,15 @@ public class EstadoService {
         repository.deleteById(id);
     }
 
-    public Integer updateEstado(EstadoRequest request) {
-        Estado estado = mapper.toEstado(request);
-        if (request.estadoId() == null) {
-            throw new EstadoException("El id del estado no puede ser nulo.");
-        }
-        else if (!repository.existsById(request.estadoId())) {
-            throw new EstadoException("El Estado con id " + request.estadoId() + " no existe.");
-        }
+    public Integer updateEstado(Integer estadoId, EstadoRequest request) {
+        Estado estado = repository.findById(estadoId)
+            .orElseThrow(() -> new EstadoException("El estado con id " + estadoId + " no existe."));
+
+            estado.setNombre(request.nombre());
+            estado.setActivo(request.activo());
+            estado.setAmbito(request.ambito());
+            estado.setDescripcion(request.descripcion());
+            
         repository.save(estado);
         return estado.getEstadoId();
     }

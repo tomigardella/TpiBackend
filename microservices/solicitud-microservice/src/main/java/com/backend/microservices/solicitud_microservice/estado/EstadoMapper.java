@@ -7,7 +7,6 @@ public class EstadoMapper {
 
     public Estado toEstado(EstadoRequest request) {
         return Estado.builder()
-                .estadoId(request.estadoId())
                 .nombre(request.nombre())
                 .descripcion(request.descripcion())
                 .activo(request.activo())

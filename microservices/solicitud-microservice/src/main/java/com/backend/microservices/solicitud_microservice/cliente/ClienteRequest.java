@@ -5,7 +5,6 @@ import java.util.List;
 import jakarta.validation.constraints.NotNull;
 
 public record ClienteRequest(
-    Integer clienteId,
 
     @NotNull(message = "El nombre no puede ser nulo")
     String nombre,

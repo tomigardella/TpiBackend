@@ -37,14 +37,18 @@ public class ClienteService {
 
     }
 
-    public Integer updateCliente(ClienteRequest request) {
-        Cliente cliente = mapper.toCliente(request);
-        if (request.clienteId() == null) {
-            throw new ClienteException("El id de cliente no puede ser nulo.");
-        }
-        else if (!repository.existsById(request.clienteId())) {
-            throw new ClienteException("El cliente con id " + request.clienteId() + " no existe.");
-        }
+    public Integer updateCliente(Integer clienteId, ClienteRequest request) {
+        Cliente cliente = repository.findById(clienteId)
+            .orElseThrow(() -> new ClienteException("El cliente con id " + clienteId + " no existe."));
+
+            cliente.setNombre(request.nombre());
+            cliente.setApellido(request.apellido());
+            cliente.setTipoDocumento(request.tipoDocumento());
+            cliente.setNroDocumento(request.nroDocumento());
+            cliente.setTelefono(request.telefono());
+            cliente.setEmail(request.email());
+            cliente.setDireccion(request.direccion());
+
         repository.save(cliente);
         return cliente.getClienteId();
     }

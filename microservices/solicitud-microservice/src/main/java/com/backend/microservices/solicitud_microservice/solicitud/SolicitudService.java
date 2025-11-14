@@ -59,8 +59,8 @@ public class SolicitudService {
     }
 
     // Actualizar una solicitud existente
-    public void updateSolicitud(SolicitudRequest request) {
-        Solicitud solicitud = solicitudRepository.findById(request.solicitudId())
+    public void updateSolicitud(Integer solicitudId, SolicitudRequest request) {
+        Solicitud solicitud = solicitudRepository.findById(solicitudId)
                 .orElseThrow(() -> new SolicitudException("Solicitud no encontrada"));
 
         Cliente cliente = clienteRepository.findById(request.clienteId())

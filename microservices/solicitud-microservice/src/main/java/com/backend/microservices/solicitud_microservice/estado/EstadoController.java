@@ -38,15 +38,18 @@ public class EstadoController {
     public ResponseEntity<Void> deleteEstado(@PathVariable("estadoId") Integer id) throws Exception {
         
         service.deleteEstado(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{estadoId}")
+    public ResponseEntity<Void> updateEstado(
+            @PathVariable Integer estadoId,
+            @Valid @RequestBody EstadoRequest request) {
+
+        service.updateEstado(estadoId, request);
         return ResponseEntity.accepted().build();
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> updateEstado(@Valid @RequestBody EstadoRequest request) {
-
-        service.updateEstado(request);
-        return ResponseEntity.accepted().build();
-    }
 
     @GetMapping("/{estadoId}")
     public ResponseEntity<EstadoResponse> getEstadoById(@PathVariable("estadoId") Integer id) {

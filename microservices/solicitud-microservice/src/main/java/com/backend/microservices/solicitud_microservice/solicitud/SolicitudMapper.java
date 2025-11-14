@@ -27,7 +27,6 @@ public class SolicitudMapper {
 
     public Solicitud toSolicitud(SolicitudRequest request, Cliente cliente, Tarifa tarifa, Estado estado) {
         return Solicitud.builder()
-                .solicitudId(request.solicitudId())
                 .contenedorId(request.contenedorId())
                 .origenId(request.origenId())
                 .destinoId(request.destinoId())

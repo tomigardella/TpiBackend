@@ -3,7 +3,6 @@ package com.backend.microservices.solicitud_microservice.tarifa;
 import jakarta.validation.constraints.NotNull;
 
 public record TarifaRequest(
-    Integer tarifaId,
     
     @NotNull(message = "El rango de peso minimo no puede ser nulo")
     Double rangoPesoMinKg,

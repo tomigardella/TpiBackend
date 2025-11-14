@@ -38,22 +38,46 @@ public class TarifaService {
         repository.deleteById(id);
     }
 
-    public Integer updateTarifa(TarifaRequest request) {
-        Tarifa tarifa = mapper.toTarifa(request);
-        if (request.tarifaId() == null) {
-            throw new TarifaException("El id de tarifa no puede ser nulo.");
-        }
-        else if (!repository.existsById(request.tarifaId())) {
-            throw new TarifaException("La tarifa con id " + request.tarifaId() + " no existe.");
-        }
+    public Integer updateTarifa(Integer tarifaId, TarifaRequest request) {
+
+        Tarifa tarifa = repository.findById(tarifaId)
+            .orElseThrow(() -> new TarifaException("La tarifa con id " + tarifaId + " no existe."));
+
+        // Actualizar campos
+        tarifa.setRangoPesoMinKg(request.rangoPesoMinKg());
+        tarifa.setRangoPesoMaxKg(request.rangoPesoMaxKg());
+        tarifa.setRangoVolMinM3(request.rangoVolMinM3());
+        tarifa.setRangoVolMaxM3(request.rangoVolMaxM3());
+        tarifa.setCostoKmBase(request.costoKmBase());
+        tarifa.setCargoGestionPorTramo(request.cargoGestionPorTramo());
+
         repository.save(tarifa);
         return tarifa.getTarifaId();
-    }
+}
 
     public TarifaResponse getTarifaById(Integer id) {
         return repository
                 .findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new TarifaException("La tarifa con id " + id + " no existe."));
+    }
+
+    public TarifaCalculoResponse calcularCostoEstimado(TarifaCalculoRequest request) {
+
+        Tarifa tarifa = repository
+                .findByRangoPesoMinKgLessThanEqualAndRangoPesoMaxKgGreaterThanEqualAndRangoVolMinM3LessThanEqualAndRangoVolMaxM3GreaterThanEqual(
+                        request.peso(),
+                        request.peso(),
+                        request.volumen(),
+                        request.volumen()
+                )
+                .orElseThrow(() -> new TarifaException("No existe tarifa válida para ese peso y volumen"));
+
+        double costo = request.distanciaTotalKM() * tarifa.getCostoKmBase();
+
+        // Si querés incluir el cargo por tramo:
+        costo += tarifa.getCargoGestionPorTramo();
+
+        return new TarifaCalculoResponse(costo);
     }
 }

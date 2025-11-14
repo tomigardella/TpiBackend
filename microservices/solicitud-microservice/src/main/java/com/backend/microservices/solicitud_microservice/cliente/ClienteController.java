@@ -36,13 +36,14 @@ public class ClienteController {
     public ResponseEntity<Void> deleteCliente(@PathVariable("clienteId") Integer id) throws Exception {
         
         service.deleteCliente(id);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> updateCliente(@Valid @RequestBody ClienteRequest request) {
-
-        service.updateCliente(request);
+    @PutMapping("/{clienteId}")
+    public ResponseEntity<Void> updateCliente(
+            @PathVariable Integer clienteId,
+            @Valid @RequestBody ClienteRequest request) {
+        service.updateCliente(clienteId, request);
         return ResponseEntity.accepted().build();
     }
 

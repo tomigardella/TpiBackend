@@ -37,13 +37,15 @@ public class TarifaController {
     public ResponseEntity<Void> deleteTarifa(@PathVariable("tarifaId") Integer id) throws Exception {
         
         service.deleteTarifa(id);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> updateTarifa(@Valid @RequestBody TarifaRequest request) {
+    @PutMapping("/{tarifaId}")
+    public ResponseEntity<Void> updateTarifa(
+        @PathVariable Integer tarifaId,
+        @Valid @RequestBody TarifaRequest request) {
 
-        service.updateTarifa(request);
+        service.updateTarifa(tarifaId, request);
         return ResponseEntity.accepted().build();
     }
 
@@ -51,4 +53,13 @@ public class TarifaController {
     public ResponseEntity<TarifaResponse> getTarifaById(@PathVariable("tarifaId") Integer id) {
         return ResponseEntity.ok(service.getTarifaById(id));
     }  
+
+    // /api/tarifas/calcular
+    @PostMapping("/calcular/{tarifaId}")
+    public ResponseEntity<TarifaCalculoResponse> calcularCostoEstimado(
+        @PathVariable Integer tarifaId,
+        @Valid @RequestBody TarifaCalculoRequest request
+    ) {
+            return ResponseEntity.ok(service.calcularCostoEstimado(request));
+    }
 }

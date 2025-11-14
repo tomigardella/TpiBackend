@@ -10,7 +10,6 @@ public class ClienteMapper {
 
     public Cliente toCliente(ClienteRequest request) {
         return Cliente.builder()
-                .clienteId(request.clienteId())
                 .nombre(request.nombre())
                 .apellido(request.apellido())
                 .tipoDocumento(request.tipoDocumento())
