@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.backend.microservices.solicitud_microservice.cambio_estado.CambioEstado;
+import com.backend.microservices.solicitud_microservice.cambio_estado.CambioEstadoRepository;
+import com.backend.microservices.solicitud_microservice.cambio_estado.CambioEstadoRequest;
 import com.backend.microservices.solicitud_microservice.cliente.Cliente;
 import com.backend.microservices.solicitud_microservice.cliente.ClienteRepository;
 import com.backend.microservices.solicitud_microservice.estado.Estado;
@@ -23,9 +26,10 @@ public class SolicitudService {
     private final ClienteRepository clienteRepository;
     private final TarifaRepository tarifaRepository;
     private final EstadoRepository estadoRepository;
+    private final CambioEstadoRepository cambioEstadoRepository;
     private final SolicitudMapper mapper;
 
-    // 🔹 Obtener todas las solicitudes
+    // Obtener todas las solicitudes
     public List<SolicitudResponse> getAllSolicitudes() {
         return solicitudRepository.findAll()
                 .stream()
@@ -33,14 +37,14 @@ public class SolicitudService {
                 .toList();
     }
 
-    // 🔹 Obtener una solicitud por ID
+    // Obtener una solicitud por ID
     public SolicitudResponse getSolicitudById(Integer id) {
         return solicitudRepository.findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new SolicitudException("Solicitud no encontrada con id: " + id));
     }
 
-    // 🔹 Crear una nueva solicitud
+    // Crear una nueva solicitud
     public Integer createSolicitud(SolicitudRequest request) {
         Cliente cliente = clienteRepository.findById(request.clienteId())
                 .orElseThrow(() -> new SolicitudException("Cliente no encontrado"));
@@ -54,7 +58,7 @@ public class SolicitudService {
         return solicitud.getSolicitudId();
     }
 
-    // 🔹 Actualizar una solicitud existente
+    // Actualizar una solicitud existente
     public void updateSolicitud(SolicitudRequest request) {
         Solicitud solicitud = solicitudRepository.findById(request.solicitudId())
                 .orElseThrow(() -> new SolicitudException("Solicitud no encontrada"));
@@ -87,11 +91,39 @@ public class SolicitudService {
         solicitudRepository.save(solicitud);
     }
 
-    // 🔹 Eliminar una solicitud
+    // Eliminar una solicitud
     public void deleteSolicitud(Integer id) {
         if (!solicitudRepository.existsById(id)) {
             throw new SolicitudException("Solicitud no encontrada con id: " + id);
         }
         solicitudRepository.deleteById(id);
     }
+
+    public void cambiarEstadoSolicitud(Integer solicitudId, CambioEstadoRequest request) {
+        Solicitud solicitud = solicitudRepository.findById(solicitudId)
+                .orElseThrow(() -> new SolicitudException("Solicitud no encontrada con id: " + solicitudId));
+
+        Estado nuevoEstado = estadoRepository.findById(request.estadoId())
+                .orElseThrow(() -> new SolicitudException("Estado no encontrado con id: " + request.estadoId()));
+
+        // Registrar cambio de estado anterior en la tabla CambioEstado
+        CambioEstado ultimoCambio = cambioEstadoRepository.findTopBySolicitudOrderByFechaDesdeDesc(solicitud);
+        if (ultimoCambio != null) {
+                ultimoCambio.setFechaHasta(new java.sql.Timestamp(System.currentTimeMillis()));
+                cambioEstadoRepository.save(ultimoCambio);
+        }
+
+        CambioEstado nuevoCambio = new CambioEstado();
+        nuevoCambio.setSolicitud(solicitud);
+        nuevoCambio.setEstado(nuevoEstado);
+        nuevoCambio.setFechaDesde(new java.sql.Timestamp(System.currentTimeMillis()));
+        nuevoCambio.setFechaHasta(null);
+
+        cambioEstadoRepository.save(nuevoCambio);
+
+        // Actualizar estado actual en la solicitud
+        solicitud.setEstadoActual(nuevoEstado);
+        solicitudRepository.save(solicitud);
+   }
 }
+

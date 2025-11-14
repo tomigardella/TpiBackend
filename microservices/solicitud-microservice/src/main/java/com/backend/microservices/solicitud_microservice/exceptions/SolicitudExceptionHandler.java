@@ -33,17 +33,45 @@ public class SolicitudExceptionHandler extends GlobalExceptionHandler {
 
     }
 
-    // @ExceptionHandler(ProductException.class)
-    // public ResponseEntity<ErrorResponse> handle (ProductException exception)
-    // {
+    @ExceptionHandler(EstadoException.class)
+    public ResponseEntity<ErrorResponse> handle (EstadoException exception)
+    {
       
-    //     var errors = new HashMap<String, String>();
-    //     var fieldName = "solicitud-service";
-    //     errors.put(fieldName, exception.getMessage());
+        var errors = new HashMap<String, String>();
+        var fieldName = "solicitud-service";
+        errors.put(fieldName, exception.getMessage());
 
-    //     log.warn("Product error: {}", exception.toString());
+        log.warn("Estado error: {}", exception.toString());
 
-    //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errors)); 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errors)); 
 
-    // } 
+    } 
+    
+    @ExceptionHandler(ClienteException.class)
+    public ResponseEntity<ErrorResponse> handle (ClienteException exception)
+    {
+      
+        var errors = new HashMap<String, String>();
+        var fieldName = "solicitud-service";
+        errors.put(fieldName, exception.getMessage());
+
+        log.warn("Cliente error: {}", exception.toString());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errors)); 
+
+    }  
+    
+    @ExceptionHandler(SolicitudException.class)
+    public ResponseEntity<ErrorResponse> handle (SolicitudException exception)
+    {
+      
+        var errors = new HashMap<String, String>();
+        var fieldName = "solicitud-service";
+        errors.put(fieldName, exception.getMessage());
+
+        log.warn("Solicitud error: {}", exception.toString());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errors)); 
+
+    } 
 }

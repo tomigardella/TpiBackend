@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.microservices.solicitud_microservice.cambio_estado.CambioEstadoRequest;
 import com.backend.microservices.solicitud_microservice.tarifa.TarifaRequest;
 import com.backend.microservices.solicitud_microservice.tarifa.TarifaResponse;
 
@@ -52,5 +53,14 @@ public class SolicitudController {
     @GetMapping("/{solicitudId}")
     public ResponseEntity<SolicitudResponse> getSolicitudById(@PathVariable("solicitudId") Integer id) {
         return ResponseEntity.ok(service.getSolicitudById(id));
+    }
+
+    @PutMapping("/{solicitudId}/estado")
+    public ResponseEntity<Void> cambiarEstado(
+            @PathVariable("solicitudId") Integer solicitudId,
+            @Valid @RequestBody CambioEstadoRequest request) {
+
+        service.cambiarEstadoSolicitud(solicitudId, request);
+        return ResponseEntity.ok().build();
     }
 }
