@@ -54,7 +54,7 @@ public class TarifaController {
         return ResponseEntity.ok(service.getTarifaById(id));
     }  
 
-    // /api/tarifas/calcular
+    // Calcular el costo estimado de una tarifa
     @PostMapping("/calcular/{tarifaId}")
     public ResponseEntity<TarifaCalculoResponse> calcularCostoEstimado(
         @PathVariable Integer tarifaId,
