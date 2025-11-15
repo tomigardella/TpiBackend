@@ -34,7 +34,6 @@ public class ClienteService {
                 .findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new ClienteException("El Cliente con id " + id + " no existe."));
-
     }
 
     public Integer updateCliente(Integer clienteId, ClienteRequest request) {

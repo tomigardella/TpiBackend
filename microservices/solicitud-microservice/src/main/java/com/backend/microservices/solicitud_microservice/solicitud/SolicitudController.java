@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.microservices.solicitud_microservice.cambio_estado.CambioEstadoRequest;
-import com.backend.microservices.solicitud_microservice.tarifa.TarifaRequest;
-import com.backend.microservices.solicitud_microservice.tarifa.TarifaResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
