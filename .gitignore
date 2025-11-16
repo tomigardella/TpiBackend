@@ -34,3 +34,8 @@ build/
 
 ### Ignore log files ###
 *.log
+
+# Archivos de datos grandes
+data/
+*.osm.pbf
+*.osrm*
