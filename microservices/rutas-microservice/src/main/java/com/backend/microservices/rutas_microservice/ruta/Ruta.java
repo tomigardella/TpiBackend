@@ -28,5 +28,6 @@ public class Ruta {
     private Integer cantidadDepositos;
     private Double distanciaTotalKm;
     private Timestamp fechaCreacion;
+    
     private Integer solicitudId;
 }

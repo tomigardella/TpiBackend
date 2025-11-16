@@ -25,7 +25,7 @@ public class SolicitudController {
     private final SolicitudService service;
 
 
-    // GET SOLICITUDES
+    // GET TODAS SOLICITUDES
     @GetMapping()
     public ResponseEntity<List<SolicitudResponse>> getAllSolicitudes() {
         return ResponseEntity.ok(service.getAllSolicitudes());
