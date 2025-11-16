@@ -19,6 +19,7 @@
 		<module>solicitud-microservice</module>
 		<module>camiones-microservice</module>
 		<module>rutas-microservice</module>
+		<module>depositos-microservice</module>
 	</modules>
 	<properties>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
